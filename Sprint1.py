@@ -15,13 +15,14 @@ url = 'https://api.github.com/graphql'
 qry = '"language:python"'
 api_token = "c9269fbff3e26e513120156dba1d327e0f614b94"
 headers = {'Authorization': 'token %s' % api_token}
-json = { 'query' : '{ search(query: "language:python", type: REPOSITORY, first: 100) { edges {  node { ... on Repository {  nameWithOwner   createdAt     stargazerCount      primaryLanguage { name } watchers {  totalCount  } forks {  totalCount   } releases { totalCount   } } } } repositoryCount}}' }
+json = { 'query' : '{ search(query: '+ qry +', type: REPOSITORY, first: 100) { edges {  node { ... on Repository {  nameWithOwner   createdAt     stargazerCount      primaryLanguage { name } watchers {  totalCount  } forks {  totalCount   } releases { totalCount   } } } } repositoryCount}}' }
 response = requests.post(url=url, json=json, headers=headers)
 print("Iniciando busca de repositórios Pyhton no GitHub")
 
 with open('Dados_Python.csv', mode='w', newline='') as file:
     while(response.status_code != 200):
         print("Erro na requisição, tentando novamente")
+        print(response)
         response = requests.post(url=url, json=json, headers=headers)
     item = 0
     writer = csv.writer(file)
@@ -45,8 +46,8 @@ with open('Dados_Python.csv', mode='w', newline='') as file:
         item = item + 1 
 
 # Cria arquivo Java
-qry = '"language:python"'
-json = { 'query' : '{ search(query: "language:java", type: REPOSITORY, first: 100) { edges {  node { ... on Repository {  nameWithOwner   createdAt     stargazerCount      primaryLanguage { name } watchers {  totalCount  } forks {  totalCount   } releases { totalCount   } } } } repositoryCount}}' }
+qry = '"language:java"'
+json = { 'query' : '{ search(query: '+ qry +', type: REPOSITORY, first: 100) { edges {  node { ... on Repository {  nameWithOwner   createdAt     stargazerCount      primaryLanguage { name } watchers {  totalCount  } forks {  totalCount   } releases { totalCount   } } } } repositoryCount}}' }
 response = requests.post(url=url, json=json, headers=headers)
 print("Iniciando busca de repositórios Java no GitHub")
 with open('Dados_Java.csv', mode='w', newline='') as file:
